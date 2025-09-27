@@ -2,11 +2,23 @@ import os
 from pathlib import Path
 from typing import List, Dict, Tuple
 
-# --- CONFIGURATION ---
+# Alternative base path detection for WSL
+def detect_best_base_path():
+    """Detect the best base path for WSL environment"""
+    possible_paths = [
+        "/mnt/c/Users/rosselio/Documents",  # Your original path
+        #"/home/rosselio/Documents",         # WSL home directory
+        Path.cwd(),                         # Current directory
+    ]
+    
+    for path in possible_paths:
+        path_obj = Path(path)
+        if path_obj.exists():
+            return path_obj
+    return Path.cwd()  # Fallback to current directory
 
-# Base path - change this to your desired location
-# NOTE: Using a cross-platform path structure in the script
-BASE_PATH = r"/mnt/c/Users/rosselio/Documents"
+# Then use it like this:
+BASE_PATH = detect_best_base_path()
 
 # Niche-Specific Directory and File Templates
 # The folder structure is tailored for the core workflows of each niche.
